@@ -31,3 +31,32 @@ it can be found.
 * Documentation (PT-BR): [docs/AI_MODE.md](docs/AI_MODE.md)
 * Source: `GTA3Script Source/sp_ai.sc` → `cleo/SpiderJ16D/sp_ai.cs`
 * Rebuild: `GTA3SC=gta3sc CLEO_XML=cleo.xml ./tools/build_ai.sh`
+
+## Instalação / release
+
+Para compilar **todos** os scripts e gerar um pacote pronto para instalar
+(pasta `CLEO\` + textos + sfx + docs):
+
+```
+GTA3SC=/caminho/gta3sc CLEO_XML=/caminho/cleo.xml ./tools/build_release.sh
+```
+
+O resultado sai em `release/Spider-Man_GTA_SA_<versao>_INSTALL.zip` e o log de
+compilação (com o tamanho e o hash de cada `.cs`) em
+`release/COMPILE_REPORT.txt`.
+
+Dentro do zip:
+
+| Caminho | Conteúdo |
+|---|---|
+| `CLEO\MSpiderJ16Dv7*.cs` | loader, eventos e música |
+| `CLEO\cleo_text\MSpiderJ16Dv7.fxt` | textos do mod |
+| `CLEO\SpiderJ16D\*.cs` | 31 scripts do mod (+ `sp_ai.cs`) |
+| `CLEO\SpiderJ16D\config.ini` | configuração, incluindo a seção `[ai]` |
+| `CLEO\SpiderJ16D\sfx\` | 96 efeitos sonoros |
+| `CLEO\SpiderJ16D\music\` | vazio (mp3 de música ambiente não fazem parte do repo) |
+| `INSTALL.txt` / `IA_MODOS.md` | instruções de instalação e documentação da IA |
+| `EXTRAS\` | scripts opcionais (Screwball, SAMS, `spider_fx_system.txt`) |
+
+O pacote **não** inclui modelos/skins/animações nem os `.fxs` de partículas:
+esses arquivos continuam vindo da instalação oficial do mod.
