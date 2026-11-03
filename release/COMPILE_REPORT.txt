@@ -1,20 +1,20 @@
   OK  MSpiderJ16Dv7.cs  -  62730 bytes  -  identico ao .cs que ja estava no repo
-  OK  MSpiderJ16Dv7_events.cs  -  3802 bytes  -  recompilado (diferente do .cs que ja estava no repo)
-  OK  MSpiderJ16Dv7_music.cs  -  5626 bytes  -  recompilado (diferente do .cs que ja estava no repo)
-  OK  sp_3d.cs  -  878 bytes  -  recompilado (diferente do .cs que ja estava no repo)
-  OK  sp_ai.cs  -  8121 bytes  -  identico ao .cs que ja estava no repo
+  OK  MSpiderJ16Dv7_events.cs  -  3802 bytes  -  identico ao .cs que ja estava no repo
+  OK  MSpiderJ16Dv7_music.cs  -  5626 bytes  -  identico ao .cs que ja estava no repo
+  OK  sp_3d.cs  -  878 bytes  -  identico ao .cs que ja estava no repo
+  OK  sp_ai.cs  -  8217 bytes  -  recompilado (diferente do .cs que ja estava no repo)
   OK  sp_dw.cs  -  17704 bytes  -  identico ao .cs que ja estava no repo
   OK  sp_ev.cs  -  7334 bytes  -  identico ao .cs que ja estava no repo
   OK  sp_evb.cs  -  3672 bytes  -  identico ao .cs que ja estava no repo
-  OK  sp_hud.cs  -  8580 bytes  -  recompilado (diferente do .cs que ja estava no repo)
+  OK  sp_hud.cs  -  8580 bytes  -  identico ao .cs que ja estava no repo
   OK  sp_lf.cs  -  392 bytes  -  identico ao .cs que ja estava no repo
   OK  sp_lvl.cs  -  5956 bytes  -  identico ao .cs que ja estava no repo
-  OK  sp_main.cs  -  31939 bytes  -  recompilado (diferente do .cs que ja estava no repo)
+  OK  sp_main.cs  -  31939 bytes  -  identico ao .cs que ja estava no repo
   OK  sp_mb.cs  -  5116 bytes  -  identico ao .cs que ja estava no repo
   OK  sp_me.cs  -  11676 bytes  -  identico ao .cs que ja estava no repo
   OK  sp_ml.cs  -  19447 bytes  -  identico ao .cs que ja estava no repo
   OK  sp_mm.cs  -  1626 bytes  -  identico ao .cs que ja estava no repo
-  OK  sp_po.cs  -  15397 bytes  -  recompilado (diferente do .cs que ja estava no repo)
+  OK  sp_po.cs  -  15397 bytes  -  identico ao .cs que ja estava no repo
   OK  sp_prt.cs  -  11544 bytes  -  identico ao .cs que ja estava no repo
   OK  sp_res.cs  -  13469 bytes  -  identico ao .cs que ja estava no repo
   OK  sp_st.cs  -  575 bytes  -  identico ao .cs que ja estava no repo

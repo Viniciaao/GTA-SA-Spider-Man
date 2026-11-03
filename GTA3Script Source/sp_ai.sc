@@ -95,7 +95,8 @@ iDriver = 0
 idle_loop:
     WAIT 1000
     GOSUB read_vars
-    IF GOSUB ai_can_encounter
+    GOSUB ai_can_encounter
+    IF iTemp = 0
         GENERATE_RANDOM_INT_IN_RANGE 0 100 (iRand)
         IF iRand < iChance
             GOSUB spawn_ai
@@ -167,73 +168,81 @@ read_vars:
     GET_CLEO_SHARED_VAR varInMenu (isInMainMenu)
 RETURN
 
-//-+--- can the AI be found right now?
+//-+--- can the AI be found right now?  -> iTemp: 0 = yes | 1 = no
+//NOTE: do not use RETURN_TRUE/RETURN_FALSE here. gta3sc compiles them to
+//0x0485 / 0x059A for SA, which do NOT return from the subroutine (the
+//routine falls through to the next one, keeping the caller logic broken).
+//So the result goes in iTemp and the routine leaves with a plain RETURN.
 ai_can_encounter:
+    iTemp = 1
     IF NOT IS_PLAYER_PLAYING 0
-        RETURN_FALSE
+        RETURN
     ENDIF
     IF mode = AI_MODE_PLAYER
         IF toggleSpiderMod = 0
-            RETURN_FALSE
+            RETURN
         ENDIF
     ENDIF
     IF flag_player_on_mission > 0
-        RETURN_FALSE
+        RETURN
     ENDIF
     IF isInMainMenu = 1
-        RETURN_FALSE
+        RETURN
     ENDIF
     IF IS_CHAR_DEAD player_actor
-        RETURN_FALSE
+        RETURN
     ENDIF
     IF IS_CHAR_IN_ANY_CAR player_actor
-        RETURN_FALSE
+        RETURN
     ENDIF
     IF IS_ON_MISSION
-        RETURN_FALSE
+        RETURN
     ENDIF
     IF IS_ON_SCRIPTED_CUTSCENE
-        RETURN_FALSE
+        RETURN
     ENDIF
     IF IS_ON_CUTSCENE
-        RETURN_FALSE
+        RETURN
     ENDIF
     GET_AREA_VISIBLE (iTemp)
     IF iTemp > 0    //interior
-        RETURN_FALSE
+        iTemp = 1
+        RETURN
     ENDIF
-    RETURN_TRUE
+    iTemp = 0
+RETURN
 
 //-+--- abort a running encounter (player died, mission started, mod off...)
 ai_shouldabort:
+    iTemp = 1
     IF NOT IS_PLAYER_PLAYING 0
-        RETURN_TRUE
+        RETURN
     ENDIF
     GOSUB read_vars
     IF mode = AI_MODE_PLAYER
         IF toggleSpiderMod = 0
-            RETURN_TRUE
+            RETURN
         ENDIF
     ENDIF
     IF flag_player_on_mission > 0
-        RETURN_TRUE
+        RETURN
     ENDIF
     IF isInMainMenu = 1
-        RETURN_TRUE
+        RETURN
     ENDIF
     IF IS_CHAR_DEAD player_actor
-        RETURN_TRUE
+        RETURN
     ENDIF
-    IF NOT DOES_CHAR_EXIST ai_actor
-        RETURN_TRUE
+    IF DOES_CHAR_EXIST ai_actor
+        IF IS_CHAR_DEAD ai_actor
+            RETURN
+        ENDIF
+        IF NOT LOCATE_CHAR_DISTANCE_TO_CHAR ai_actor player_actor ai_despawn_distance
+            RETURN
+        ENDIF
+        iTemp = 0
     ENDIF
-    IF IS_CHAR_DEAD ai_actor
-        RETURN_TRUE
-    ENDIF
-    IF NOT LOCATE_CHAR_DISTANCE_TO_CHAR ai_actor player_actor ai_despawn_distance
-        RETURN_TRUE
-    ENDIF
-    RETURN_FALSE
+RETURN
 
 //-+-----------------------------------------------------------------
 //-+ SPAWN
@@ -397,7 +406,8 @@ encounter:
                 actionId = ACT_LEAVE
                 BREAK
         ENDSWITCH
-        IF GOSUB ai_shouldabort
+        GOSUB ai_shouldabort
+        IF iTemp = 1
             GOSUB cleanup
             RETURN
         ENDIF
@@ -438,7 +448,8 @@ act_patrol:
     iTick = 0
     WHILE iTick < 5
         iTick ++
-        IF GOSUB ai_shouldabort
+        GOSUB ai_shouldabort
+        IF iTemp = 1
             RETURN
         ENDIF
         GENERATE_RANDOM_FLOAT_IN_RANGE -50.0 50.0 (fA)
@@ -470,7 +481,8 @@ act_crime:
     ENDIF
     fZ = fG + 0.5
     GOSUB ai_travel
-    IF GOSUB ai_shouldabort
+    GOSUB ai_shouldabort
+    IF iTemp = 1
         RETURN
     ENDIF
     GOSUB ai_spawn_thugs
@@ -478,7 +490,8 @@ act_crime:
     GOSUB ai_say
     timera = 0
     WHILE TRUE
-        IF GOSUB ai_shouldabort
+        GOSUB ai_shouldabort
+        IF iTemp = 1
             GOSUB ai_clear_thugs
             RETURN
         ENDIF
@@ -531,7 +544,8 @@ act_chase:
     timera = 0
     //pursuit
     WHILE TRUE
-        IF GOSUB ai_shouldabort
+        GOSUB ai_shouldabort
+        IF iTemp = 1
             GOSUB ai_clear_chase
             RETURN
         ENDIF
@@ -572,7 +586,8 @@ act_chase:
         iTarget3 = 0
         timera = 0
         WHILE TRUE
-            IF GOSUB ai_shouldabort
+            GOSUB ai_shouldabort
+            IF iTemp = 1
                 BREAK
             ENDIF
             GOSUB ai_fight_tick
@@ -619,7 +634,8 @@ ai_travel:
     iCount = 0
     WHILE iCount < 6
         iCount ++
-        IF GOSUB ai_shouldabort
+        GOSUB ai_shouldabort
+        IF iTemp = 1
             RETURN
         ENDIF
         IF NOT DOES_CHAR_EXIST ai_actor
@@ -710,7 +726,8 @@ ai_leap_to:
         SET_CHAR_COORDINATES ai_actor fAX fAY fAZ
         WAIT 110
         IF iTick = 5
-            IF GOSUB ai_shouldabort
+            GOSUB ai_shouldabort
+            IF iTemp = 1
                 BREAK
             ENDIF
         ENDIF
