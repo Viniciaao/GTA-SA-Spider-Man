@@ -48,6 +48,8 @@ CONST_INT varIdPowers           34    //MSpiderJ16Dv7 - sp_po     ||Id powers 1 
 CONST_INT varPowersProgress     35    //sp_po     || current power progress
 
 CONST_INT varInMenu             40    //1= On Menu       || 0= Menu Closed
+CONST_INT varAiRunning          59    //sp_ai     ||1= AI thread running || 0= Stopped
+CONST_INT varAiMode             60    //MSpiderJ16Dv7 ||0=Normal ||1=Player+AI ||2=AI only
 CONST_INT varMapLegendLandMark  43    //Show: 1= enable   || 0= disable
 CONST_INT varMapLegendBackPack  44    //Show: 1= enable   || 0= disable
 
@@ -192,6 +194,36 @@ SET_CLEO_SHARED_VAR varMapLegendLandMark iTempVar    //Show: 1= enable   || 0= d
 iTempVar = 1
 SET_CLEO_SHARED_VAR varMapLegendBackPack iTempVar    //Show: 1= enable   || 0= disable
 
+//-+-- AI MODE (sp_ai)      //See: CLEO\SpiderJ16D\config.ini -> [ai]
+//  0 = Normal             : player can be Spider-Man, no AI
+//  1 = Player + AI        : player can be Spider-Man and may meet the AI
+//  2 = AI only            : player gets NOTHING from the mod (no menu,
+//                           no keys, no messages, no hud). Only the AI.
+iTempVar = 0
+READ_INT_FROM_INI_FILE "CLEO\SpiderJ16D\config.ini" "ai" "mode" (iTempVar)
+IF iTempVar < 0
+    iTempVar = 0
+ENDIF
+IF iTempVar > 2
+    iTempVar = 0
+ENDIF
+SET_CLEO_SHARED_VAR varAiMode iTempVar
+IF iTempVar = 2      //AI ONLY - makes sure the mod is/keeps disabled for the player
+    iTempVar = 0
+    SET_CLEO_SHARED_VAR varStatusSpiderMod iTempVar
+    CLEO_CALL storeStatusSpiderMod 0 iTempVar
+    SET_CLEO_SHARED_VAR varMusic iTempVar
+    SET_CLEO_SHARED_VAR varHUD iTempVar
+    SET_CLEO_SHARED_VAR varInMenu iTempVar
+ENDIF
+//Start the AI thread (sp_ai.cs decides by itself if it should run)
+GET_CLEO_SHARED_VAR varAiMode (iTempVar)
+IF iTempVar > 0
+    IF DOES_FILE_EXIST "CLEO\SpiderJ16D\sp_ai.cs"
+        STREAM_CUSTOM_SCRIPT "SpiderJ16D\sp_ai.cs"
+    ENDIF
+ENDIF
+
 //xCoord = 320.0
 //yCoord = 224.0
 //CLEO_CALL storeScreenCoords 0 xCoord yCoord
@@ -201,6 +233,11 @@ iTempVar = 0    // 1:is key combination pressed
 
 //---+------------------------- START -------------------------------
 start:
+    GET_CLEO_SHARED_VAR varAiMode (iTempVar)
+    IF iTempVar = 2      //AI ONLY: no menu, no keys, no messages for the player
+        GOSUB ai_only_watchdog
+        GOTO start
+    ENDIF
     IF IS_PLAYER_PLAYING player
         IF NOT IS_CHAR_IN_ANY_CAR player_actor
 
@@ -323,6 +360,18 @@ start:
     ENDIF
     WAIT 0
 GOTO start
+
+//AI ONLY mode: keeps the AI thread alive and does nothing else
+ai_only_watchdog:
+    iTempVar = 0
+    GET_CLEO_SHARED_VAR varAiRunning (iTempVar)
+    IF iTempVar = 0
+        IF DOES_FILE_EXIST "CLEO\SpiderJ16D\sp_ai.cs"
+            STREAM_CUSTOM_SCRIPT "SpiderJ16D\sp_ai.cs"
+        ENDIF
+    ENDIF
+    WAIT 2000
+RETURN
 
 fix_menu:
     GET_CLEO_SHARED_VAR varOnmission (counter) // flag_player_on_mission ||0:Off ||1:on mission || 2:car chase || 3:criminal || 4:boss1 || 5:boss2
