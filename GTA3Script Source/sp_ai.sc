@@ -38,7 +38,8 @@ CONST_INT ACT_CHASE             3
 CONST_INT ACT_LEAVE             4
 
 //TUNING
-CONST_INT ai_special_slot       10    //SPECIAL10 (8=player suit, 9=missions)
+CONST_INT ai_special_slot       7     //SPECIAL07 (1-5=street crimes, 8=player suit, 9=missions)
+//NOTE: slot 10 crashed the game at LOAD_SPECIAL_CHARACTER (scrlog2.log), so use a low free slot.
 CONST_INT ai_actions_encounter  3     //actions before leaving
 CONST_INT ai_thug_health        170
 CONST_INT ai_web_damage         25
@@ -294,7 +295,14 @@ spawn_ai:
     IF iTemp = 0
         RETURN
     ENDIF
-    CREATE_CHAR PEDTYPE_CIVMALE SPECIAL10 fX fY fZ (ai_actor)
+    IF iSuit > 0
+        CREATE_CHAR PEDTYPE_CIVMALE SPECIAL07 fX fY fZ (ai_actor)
+        IF DOES_CHAR_EXIST ai_actor
+            UNLOAD_SPECIAL_CHARACTER ai_special_slot
+        ENDIF
+    ELSE
+        CREATE_CHAR PEDTYPE_CIVMALE VMAFF1 fX fY fZ (ai_actor)
+    ENDIF
     IF NOT DOES_CHAR_EXIST ai_actor
         ai_actor = 0
         RETURN
@@ -325,41 +333,94 @@ spawn_ai:
     timera = 0
 RETURN
 
-//-+--- suit models (slot 10 of the special characters)
+//-+--- suit models (special character slot 7)
+//loads the suit model into the special slot
+//-> iTemp: 1 = suit ready (CREATE_CHAR SPECIAL07) | 0 = use a normal ped
+//   iSuit is set to 0 when the suit cannot be used, so the rest of the
+//   session spawns a stock ped instead of retrying a broken load.
+//   The model is checked first (GET_MODEL_BY_NAME, CLEO+): calling
+//   LOAD_SPECIAL_CHARACTER with a model that is not installed crashes the game.
 set_suit_model:
-    SWITCH iSuit
+    iTemp = 0
+    IF iSuit > 0
+        SWITCH iSuit
         CASE 1
-            LOAD_SPECIAL_CHARACTER ai_special_slot s1
+            IF GET_MODEL_BY_NAME "s1" (iTick)
+                LOAD_SPECIAL_CHARACTER ai_special_slot s1
+                iTemp = 1
+            ENDIF
             BREAK
         CASE 2
-            LOAD_SPECIAL_CHARACTER ai_special_slot s2
+            IF GET_MODEL_BY_NAME "s2" (iTick)
+                LOAD_SPECIAL_CHARACTER ai_special_slot s2
+                iTemp = 1
+            ENDIF
             BREAK
         CASE 3
-            LOAD_SPECIAL_CHARACTER ai_special_slot s3
+            IF GET_MODEL_BY_NAME "s3" (iTick)
+                LOAD_SPECIAL_CHARACTER ai_special_slot s3
+                iTemp = 1
+            ENDIF
             BREAK
         CASE 4
-            LOAD_SPECIAL_CHARACTER ai_special_slot s4
+            IF GET_MODEL_BY_NAME "s4" (iTick)
+                LOAD_SPECIAL_CHARACTER ai_special_slot s4
+                iTemp = 1
+            ENDIF
             BREAK
         CASE 5
-            LOAD_SPECIAL_CHARACTER ai_special_slot s5
+            IF GET_MODEL_BY_NAME "s5" (iTick)
+                LOAD_SPECIAL_CHARACTER ai_special_slot s5
+                iTemp = 1
+            ENDIF
             BREAK
         CASE 6
-            LOAD_SPECIAL_CHARACTER ai_special_slot s6
+            IF GET_MODEL_BY_NAME "s6" (iTick)
+                LOAD_SPECIAL_CHARACTER ai_special_slot s6
+                iTemp = 1
+            ENDIF
             BREAK
         CASE 7
-            LOAD_SPECIAL_CHARACTER ai_special_slot s7
+            IF GET_MODEL_BY_NAME "s7" (iTick)
+                LOAD_SPECIAL_CHARACTER ai_special_slot s7
+                iTemp = 1
+            ENDIF
             BREAK
         CASE 8
-            LOAD_SPECIAL_CHARACTER ai_special_slot s8
+            IF GET_MODEL_BY_NAME "s8" (iTick)
+                LOAD_SPECIAL_CHARACTER ai_special_slot s8
+                iTemp = 1
+            ENDIF
             BREAK
         CASE 9
-            LOAD_SPECIAL_CHARACTER ai_special_slot s9
+            IF GET_MODEL_BY_NAME "s9" (iTick)
+                LOAD_SPECIAL_CHARACTER ai_special_slot s9
+                iTemp = 1
+            ENDIF
             BREAK
-        DEFAULT
-            LOAD_SPECIAL_CHARACTER ai_special_slot s2
-            BREAK
-    ENDSWITCH
-    LOAD_ALL_MODELS_NOW
+        ENDSWITCH
+    ENDIF
+    IF iTemp = 1
+        LOAD_ALL_MODELS_NOW
+        iCount = 0
+        WHILE iCount < 20
+            iCount++
+            IF HAS_SPECIAL_CHARACTER_LOADED ai_special_slot
+                BREAK
+            ENDIF
+            WAIT 100
+        ENDWHILE
+        IF NOT HAS_SPECIAL_CHARACTER_LOADED ai_special_slot
+            iTemp = 0
+        ENDIF
+    ENDIF
+    IF iTemp = 0
+        IF iSuit > 0
+            iSuit = 0
+            //diagnostic only (never shown on screen): the suit models are not installed
+            WRITE_INT_TO_INI_FILE 0 "CLEO\SpiderJ16D\config.ini" "ai_stats" "suit_ok"
+        ENDIF
+    ENDIF
 RETURN
 
 load_assets:

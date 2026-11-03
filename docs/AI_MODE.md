@@ -9,7 +9,7 @@ sequência de ações e vai embora. Nada de menu, teclas ou HUD novos.
 mode = 1       ; 0 = normal | 1 = player + IA | 2 = só IA
 chance = 35    ; % de chance de encontro a cada "interval"
 interval = 45000
-suit = 2       ; skin usada pela IA (1-9)
+suit = 2       ; skin usada pela IA (1-9, ou 0 = ped comum)
 ```
 
 ---
@@ -70,8 +70,12 @@ Mensagens (`~b~~h~Spider-Man~w~: ...`) aparecem em inglês ou espanhol conforme 
   carro, abre o menu, entra em interior, começa missão, o mod é desativado (modo 1) ou
   se afasta mais de 260 m.
 * Modelos são requisitados no início do encontro e liberados no `cleanup`
-  (`MARK_MODEL_AS_NO_LONGER_NEEDED`). A skin fica no slot `SPECIAL10`, que o mod não
-  usa (8 = skin do jogador, 9 = missões).
+  (`MARK_MODEL_AS_NO_LONGER_NEEDED`). A skin fica no slot `SPECIAL07`
+  (1-5 = street crimes, 8 = skin do jogador, 9 = missões).
+* Antes de carregar a skin o script confere se o modelo existe
+  (`GET_MODEL_BY_NAME`, CLEO+) e espera `HAS_SPECIAL_CHARACTER_LOADED`. Se a skin
+  não estiver instalada, a IA nasce com um ped comum em vez de tentar carregar um
+  modelo inexistente (isso crashava o jogo) e grava `suit_ok = 0` no `[ai_stats]`.
 
 ---
 
@@ -88,7 +92,7 @@ Além do `config.ini`, algumas constantes no topo do `sp_ai.sc` controlam a IA:
 | `ai_max_leap_ticks` | `14` | duração/tamanho do arco |
 | `ai_spawn_back` | `-85.0` | distância atrás do jogador onde ela nasce |
 | `ai_despawn_distance` | `260.0` | acima disso ela desiste e desaparece |
-| `ai_special_slot` | `10` | slot `SPECIAL0N` da skin da IA |
+| `ai_special_slot` | `7` | slot `SPECIAL0N` da skin da IA |
 | `ai_use_spider_anim` | `1` | usa o grupo de animação `spider` na IA (coloque `0` se ela ficar em T-pose) |
 
 ---

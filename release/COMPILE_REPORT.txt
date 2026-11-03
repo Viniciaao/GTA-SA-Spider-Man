@@ -2,7 +2,7 @@
   OK  MSpiderJ16Dv7_events.cs  -  3802 bytes  -  identico ao .cs que ja estava no repo
   OK  MSpiderJ16Dv7_music.cs  -  5626 bytes  -  identico ao .cs que ja estava no repo
   OK  sp_3d.cs  -  878 bytes  -  identico ao .cs que ja estava no repo
-  OK  sp_ai.cs  -  8217 bytes  -  recompilado (diferente do .cs que ja estava no repo)
+  OK  sp_ai.cs  -  8727 bytes  -  recompilado (diferente do .cs que ja estava no repo)
   OK  sp_dw.cs  -  17704 bytes  -  identico ao .cs que ja estava no repo
   OK  sp_ev.cs  -  7334 bytes  -  identico ao .cs que ja estava no repo
   OK  sp_evb.cs  -  3672 bytes  -  identico ao .cs que ja estava no repo

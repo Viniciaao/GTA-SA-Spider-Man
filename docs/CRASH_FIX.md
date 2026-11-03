@@ -95,3 +95,46 @@ Os outros scripts do projeto (`funcs.sc`, `sp_ev.sc`, `sp_ml.sc`, `sp_mb.sc`,
 binários publicados (inclusive os do build original) esses pontos também viram
 `0x0485`/`0x059A`, ou seja, também não retornam. Nada foi alterado neles aqui —
 é um trabalho separado, caso apareçam bugs do mesmo tipo nas teias/paredes.
+
+---
+
+# Crash #2 — `scrlog2.log` (carregamento da skin)
+
+Depois da correção acima o `sp_ai` passou a rodar de verdade (no log dá para ver
+as rotinas novas: `l11 = 0` + `RETURN` em `ai_can_encounter` e
+`IF l11 == 0` no loop principal). O novo crash acontece no **primeiro encontro**,
+na hora de carregar a skin:
+
+```
+00001573&1: [0006] l7(0) = 0            <- spawn_ai: ai_actor = 0
+00001580&1: [0050] GOSUB -1930          <- set_suit_model
+00001930&1: [0871] SWITCH_START 2 9 ...
+00002078&1: [023C] LOAD_SPECIAL_CHARACTER 10 "S2"
+```
+
+O jogo morre dentro de `LOAD_SPECIAL_CHARACTER`. Dois caminhos levam a isso:
+
+1. **modelo inexistente** — se o `.dff` da skin (`s1`..`s9`) não estiver no
+   `gta3.img`/IDE, o request não encontra o modelo e o jogo cai;
+2. **slot fora de faixa** — o slot era `10`; o mod nunca usa 10 (usa 1-5 em
+   `m_w.sc`, 8 nas skins do jogador e 9 nas missões).
+
+## Correção
+
+* `ai_special_slot` 10 → **7** (`SPECIAL07`), um slot livre que já é usado pela
+  própria engine em outros mods.
+* Antes de chamar `LOAD_SPECIAL_CHARACTER` o script confere se o modelo existe:
+  `IF GET_MODEL_BY_NAME "s2" (iTick)` (opcode CLEO+ `0xE9C`). Sem isso, um modelo
+  ausente ia direto para o opcode que crasha.
+* Depois do load: `LOAD_ALL_MODELS_NOW` e espera de até ~2 s por
+  `HAS_SPECIAL_CHARACTER_LOADED ai_special_slot` (023D).
+* Se a skin não carregar, a IA nasce com um ped comum (`VMAFF1`) e o script põe
+  `iSuit = 0`, então não tenta carregar de novo a cada encontro (continua barato).
+* `UNLOAD_SPECIAL_CHARACTER` logo depois do `CREATE_CHAR` (mesmo padrão do
+  `MSpiderJ16Dv7.sc`, que usa o slot 8).
+* Diagnóstico silencioso: quando a skin falha, `sp_ai` grava
+  `suit_ok = 0` na seção `[ai_stats]` do `config.ini`. Se essa chave aparecer,
+  os modelos das skins não estão instalados na pasta do jogo.
+* `suit = 0` no `[ai]` desliga a skin de vez (a IA sempre usa ped comum).
+
+`sp_ai.cs` 8217 → **8727 bytes**.
