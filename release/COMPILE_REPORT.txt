@@ -1,0 +1,47 @@
+  OK  MSpiderJ16Dv7.cs  -  62730 bytes  -  identico ao .cs que ja estava no repo
+  OK  MSpiderJ16Dv7_events.cs  -  3802 bytes  -  recompilado (diferente do .cs que ja estava no repo)
+  OK  MSpiderJ16Dv7_music.cs  -  5626 bytes  -  recompilado (diferente do .cs que ja estava no repo)
+  OK  sp_3d.cs  -  878 bytes  -  recompilado (diferente do .cs que ja estava no repo)
+  OK  sp_ai.cs  -  8121 bytes  -  identico ao .cs que ja estava no repo
+  OK  sp_dw.cs  -  17704 bytes  -  identico ao .cs que ja estava no repo
+  OK  sp_ev.cs  -  7334 bytes  -  identico ao .cs que ja estava no repo
+  OK  sp_evb.cs  -  3672 bytes  -  identico ao .cs que ja estava no repo
+  OK  sp_hud.cs  -  8580 bytes  -  recompilado (diferente do .cs que ja estava no repo)
+  OK  sp_lf.cs  -  392 bytes  -  identico ao .cs que ja estava no repo
+  OK  sp_lvl.cs  -  5956 bytes  -  identico ao .cs que ja estava no repo
+  OK  sp_main.cs  -  31939 bytes  -  recompilado (diferente do .cs que ja estava no repo)
+  OK  sp_mb.cs  -  5116 bytes  -  identico ao .cs que ja estava no repo
+  OK  sp_me.cs  -  11676 bytes  -  identico ao .cs que ja estava no repo
+  OK  sp_ml.cs  -  19447 bytes  -  identico ao .cs que ja estava no repo
+  OK  sp_mm.cs  -  1626 bytes  -  identico ao .cs que ja estava no repo
+  OK  sp_po.cs  -  15397 bytes  -  recompilado (diferente do .cs que ja estava no repo)
+  OK  sp_prt.cs  -  11544 bytes  -  identico ao .cs que ja estava no repo
+  OK  sp_res.cs  -  13469 bytes  -  identico ao .cs que ja estava no repo
+  OK  sp_st.cs  -  575 bytes  -  identico ao .cs que ja estava no repo
+  OK  sp_wep.cs  -  1102 bytes  -  identico ao .cs que ja estava no repo
+  OK  wa.cs  -  4686 bytes  -  identico ao .cs que ja estava no repo
+  OK  wa_1.cs  -  1004 bytes  -  identico ao .cs que ja estava no repo
+  OK  wb.cs  -  996 bytes  -  identico ao .cs que ja estava no repo
+  OK  wc.cs  -  5073 bytes  -  identico ao .cs que ja estava no repo
+  OK  wd.cs  -  2928 bytes  -  identico ao .cs que ja estava no repo
+  OK  we.cs  -  3466 bytes  -  identico ao .cs que ja estava no repo
+  OK  we_1.cs  -  2141 bytes  -  identico ao .cs que ja estava no repo
+  OK  wf.cs  -  2766 bytes  -  identico ao .cs que ja estava no repo
+  OK  wg.cs  -  4227 bytes  -  identico ao .cs que ja estava no repo
+  OK  wh.cs  -  8240 bytes  -  identico ao .cs que ja estava no repo
+  OK  sp_cc.cs  -  20684 bytes  -  identico ao .cs que ja estava no repo
+  OK  sp_cd.cs  -  1266 bytes  -  identico ao .cs que ja estava no repo
+  OK  m_w.cs  -  8273 bytes  -  identico ao .cs que ja estava no repo
+  OK  m_th.cs  -  6563 bytes  -  identico ao .cs que ja estava no repo
+  OK  m_bp.cs  -  7711 bytes  -  identico ao .cs que ja estava no repo
+  OK  config.ini / MSpiderJ16Dv7.fxt / 96 mp3 em sfx/
+  OK  screwball_challenges.cs
+  OK  screwball_challenge_a.cm
+  OK  SAMS/m_sams_mission2.cs
+  OK  SAMS/sp_camb.cs
+  OK  SAMS/sp_dig.cs
+  OK  SAMS/sp_prtb.cs
+  --  wars.sc e sams_m2.sc nao compilam com o config atual do CLEO+
+
+pacote: /home/user/GTA-SA-Spider-Man/release/Spider-Man_GTA_SA_1.9-AI_INSTALL.zip  (4.5M)
+relatorio: /home/user/GTA-SA-Spider-Man/release/COMPILE_REPORT.txt
